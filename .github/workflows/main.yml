@@ -61,3 +61,9 @@ jobs:
         run: |
           cp app.py preprocessAPI.py $RUNNER_TEMP/mlflow_artifacts/
           echo "app.py and preprocessAPI.py copied to $RUNNER_TEMP/mlflow_artifacts/"
+
+      # Print MLflow artifacts directory structure
+      - name: Print MLflow Artifacts Directory Structure
+        run: |
+          echo "MLflow Artifacts Structure:"
+          ls -R $RUNNER_TEMP/mlflow_artifacts/
