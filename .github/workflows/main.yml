@@ -40,7 +40,7 @@ jobs:
       - name: Run mlflow project
         run: |
           mlflow run MLproject --env-manager=local | tee output.log
-          RUN_ID=$(grep -oP "(?<=Run \(ID ')[^']+" output.log | tail -1)
+          RUN_ID=$(awk -F"'" '/Run \(ID / {print $2}' output.log | tail -1)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Extracted RUN_ID: $RUN_ID"
 
