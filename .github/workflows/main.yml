@@ -55,3 +55,9 @@ jobs:
           mkdir -p $TEMP_DIR
           cp -r mlruns/0/${{ env.RUN_ID }}/artifacts/* $TEMP_DIR/
           echo "Artifacts copied to $TEMP_DIR"
+
+      # Copy app.py and preprocessAPI.py to the same directory
+      - name: Copy app.py and preprocessAPI.py to Temporary Storage
+        run: |
+          cp app.py preprocessAPI.py $RUNNER_TEMP/mlflow_artifacts/
+          echo "app.py and preprocessAPI.py copied to $RUNNER_TEMP/mlflow_artifacts/"
