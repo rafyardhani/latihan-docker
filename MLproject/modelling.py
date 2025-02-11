@@ -7,7 +7,6 @@ import numpy as np
 import os
 import warnings
 import sys
-import dagshub
 
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
