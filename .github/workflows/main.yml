@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  CSV_URL: "MLproject/train_pca.csv"
+  CSV_URL: "MLproject/train_pca_testing.csv"
   TARGET_VAR: "Credit_Score"
 
 jobs:
@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mlflow dagshub 
+          pip install mlflow  
           
       # Run as a mlflow project
       - name: Run mlflow project
