@@ -39,7 +39,7 @@ jobs:
       # Run as a mlflow project
       - name: Run mlflow project
         run: |
-          python run_mlflow.py
+          python MLproject/run_mlflow.py
 
       # Build Docker Model
       - name: Build Docker Model
