@@ -40,11 +40,7 @@ jobs:
       - name: Run mlflow project
         run: |
           mlflow run MLproject --env-manager=local 
-  upload-artifacts:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
+    
       # Retrieve MLflow artifacts directory (default: mlruns/)
       - name: Find MLflow Artifacts
         run: |
