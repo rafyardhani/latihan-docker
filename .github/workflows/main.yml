@@ -39,31 +39,38 @@ jobs:
       # Run as a mlflow project
       - name: Run mlflow project
         run: |
-          mlflow run MLproject --env-manager=local 
-      
-      # Get latest run_id
-      - name: Get latest MLflow run_id
-        run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          mlflow run MLproject --env-manager=local
+          export RUN_ID=$(grep -oP '(?<=Run ID: )\S+' output.log)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "Latest run_id: $RUN_ID"
 
-      # Copy MLflow artifacts to temporary storage
-      - name: Copy MLflow Artifacts to Temporary Storage
+      # Build Docker Model from mlflow run_id
+      - name: Build Docker Model
         run: |
-          TEMP_DIR="$RUNNER_TEMP/mlflow_artifacts"
-          mkdir -p $TEMP_DIR
-          cp -r mlruns/0/${{ env.RUN_ID }}/artifacts/* $TEMP_DIR/
-          echo "Artifacts copied to $TEMP_DIR"
+          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc" 
+      
+      # # Get latest run_id
+      # - name: Get latest MLflow run_id
+      #   run: |
+      #     RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+      #     echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+      #     echo "Latest run_id: $RUN_ID"
 
-      # Copy app.py and preprocessAPI.py to the same directory
-      - name: Copy app.py and preprocessAPI.py to Temporary Storage
-        run: |
-          cp app.py preprocessAPI.py $RUNNER_TEMP/mlflow_artifacts/
-          echo "app.py and preprocessAPI.py copied to $RUNNER_TEMP/mlflow_artifacts/"
+      # # Copy MLflow artifacts to temporary storage
+      # - name: Copy MLflow Artifacts to Temporary Storage
+      #   run: |
+      #     TEMP_DIR="$RUNNER_TEMP/mlflow_artifacts"
+      #     mkdir -p $TEMP_DIR
+      #     cp -r mlruns/0/${{ env.RUN_ID }}/artifacts/* $TEMP_DIR/
+      #     echo "Artifacts copied to $TEMP_DIR"
 
-      # Print MLflow artifacts directory structure
-      - name: Print MLflow Artifacts Directory Structure
-        run: |
-          echo "MLflow Artifacts Structure:"
-          ls -R $RUNNER_TEMP/mlflow_artifacts/
+      # # Copy app.py and preprocessAPI.py to the same directory
+      # - name: Copy app.py and preprocessAPI.py to Temporary Storage
+      #   run: |
+      #     cp app.py preprocessAPI.py $RUNNER_TEMP/mlflow_artifacts/
+      #     echo "app.py and preprocessAPI.py copied to $RUNNER_TEMP/mlflow_artifacts/"
+
+      # # Print MLflow artifacts directory structure
+      # - name: Print MLflow Artifacts Directory Structure
+      #   run: |
+      #     echo "MLflow Artifacts Structure:"
+      #     ls -R $RUNNER_TEMP/mlflow_artifacts/
