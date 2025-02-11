@@ -41,15 +41,16 @@ jobs:
         run: |
           mlflow run MLproject --env-manager=local 
     
-      # Retrieve MLflow artifacts directory (default: mlruns/)
-      - name: Find MLflow Artifacts
+      # Get latest run_id
+      - name: Get latest MLflow run_id
         run: |
-          echo "Listing MLflow directory..."
-          ls -R mlruns || echo "No artifacts found"
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "Latest run_id: $RUN_ID"
 
-      # Upload MLflow artifacts
+      # Upload artifacts from the latest run_id
       - name: Upload MLflow Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: mlflow-artifacts
-          path: mlruns/
+          name: mlflow-artifacts-${{ env.RUN_ID }}
+          path: mlruns/0/${{ env.RUN_ID }}/artifacts/
