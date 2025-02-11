@@ -39,7 +39,10 @@ jobs:
       # Run as a mlflow project
       - name: Run mlflow project
         run: |
-          python MLproject/run_mlflow.py
+          mlflow run MLproject --env-manager=local 
+          tee mlflow_run.log
+          echo "MLflow run completed"
+          echo mlfow_run.log
 
       # Build Docker Model
       - name: Build Docker Model
