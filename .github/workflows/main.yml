@@ -40,7 +40,7 @@ jobs:
       - name: Run mlflow project
         run: |
           mlflow run MLproject --env-manager=local 
-    
+      
       # Get latest run_id
       - name: Get latest MLflow run_id
         run: |
@@ -48,9 +48,10 @@ jobs:
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
 
-      # Upload artifacts from the latest run_id
-      - name: Upload MLflow Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlflow-artifacts-${{ env.RUN_ID }}
-          path: mlruns/0/${{ env.RUN_ID }}/artifacts/
+      # Copy MLflow artifacts to temporary storage
+      - name: Copy MLflow Artifacts to Temporary Storage
+        run: |
+          TEMP_DIR="$RUNNER_TEMP/mlflow_artifacts"
+          mkdir -p $TEMP_DIR
+          cp -r mlruns/0/${{ env.RUN_ID }}/artifacts/* $TEMP_DIR/
+          echo "Artifacts copied to $TEMP_DIR"
