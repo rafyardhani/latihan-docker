@@ -40,12 +40,11 @@ jobs:
       - name: Run mlflow project
         run: |
           mlflow run MLproject --env-manager=local | tee output.log
-          echo output.log
-          RUN_ID=$(grep -oP 'run_id=\K[0-9a-f-]+' output.log | tail -1)
+          RUN_ID=$(grep -oP "(?<=Run \(ID ')[^']+" output.log | tail -1)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Extracted RUN_ID: $RUN_ID"
 
-      # Build Docker Model from mlflow run_id
+      # Build Docker Model
       - name: Build Docker Model
         run: |
           mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc" 
