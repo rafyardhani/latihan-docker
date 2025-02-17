@@ -2,8 +2,6 @@ import mlflow
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-import random
-import numpy as np
 import os
 import warnings
 import sys
